@@ -1,0 +1,226 @@
+{
+  "boltSlidesVersion": 1,
+  "boltSlidesId": "11011050-f9d6-4d43-8a9e-3e43af51bbaf",
+  "deck": {
+    "title": "Agentic Agent SSO — AgentID for WordPress",
+    "transition": "fade",
+    "font": "space",
+    "accent": "#38bdf8"
+  },
+  "slides": [
+    {
+      "id": "s1",
+      "position": 0,
+      "layout": "cover",
+      "props": {
+        "kicker": "Agentic Agent SSO · WordPress Plugin",
+        "title": "Agents get their own ==sign-in== — not yours.",
+        "subtitle": "AgentID single sign-on for WordPress: every AI agent signs in as itself, with an identity anyone can verify.",
+        "foot": "github.com/Mike-Demo/agentic-agent-sso"
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "Set the hook: when an AI agent works on a WordPress site today, it signs in as a human. This plugin gives agents their own front door — with proof of who they are.",
+      "status": "none"
+    },
+    {
+      "id": "s2",
+      "position": 1,
+      "layout": "contrast",
+      "props": {
+        "kicker": "The problem",
+        "title": "Agents ==borrow== credentials that aren't theirs.",
+        "left": {
+          "label": "Today",
+          "title": "A shared key to the whole site",
+          "points": [
+            "Agent signs in with a human's username and password",
+            "Or a long-lived application password",
+            "Site logs show a person logging in — but it was a bot"
+          ]
+        },
+        "right": {
+          "label": "The gap",
+          "title": "Three questions with no answer",
+          "points": [
+            "**Which** agent is acting right now?",
+            "**Who** is the human accountable for it?",
+            "How do you **revoke** just the agent — nothing else?"
+          ]
+        }
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "Borrowed credentials mean no attribution and no surgical revocation. If something goes wrong, you can't tell which agent did it — you burn the shared secret and everything stops.",
+      "status": "none"
+    },
+    {
+      "id": "s3",
+      "position": 2,
+      "layout": "statement",
+      "props": {
+        "kicker": "The idea · AgentID (agentid.com)",
+        "title": "An identity provider ==built for AI agents==.",
+        "body": "The agent signs in to AgentID and receives a cryptographically verifiable token — naming the agent itself and its verified human owner. WordPress can finally know who's knocking."
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "AgentID is to agents what Okta or Sign in with Apple is to people: one identity layer, verifiable by anyone. The token names the agent AND its owner.",
+      "status": "none"
+    },
+    {
+      "id": "s4",
+      "position": 3,
+      "layout": "steps",
+      "props": {
+        "kicker": "How it works",
+        "title": "Standard OpenID Connect — nothing exotic.",
+        "items": [
+          {
+            "title": "Agent starts sign-in",
+            "body": "Authorization-code flow with PKCE, straight from the plugin's login screen."
+          },
+          {
+            "title": "AgentID verifies the agent",
+            "body": "The agent authenticates; AgentID issues an identity token naming agent and owner."
+          },
+          {
+            "title": "Plugin checks signatures",
+            "body": "ES256 signatures verified against AgentID's published public keys."
+          },
+          {
+            "title": "Fails closed",
+            "body": "Unless the token proves actor_type = agent, sign-in is denied."
+          }
+        ]
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "No custom protocol: plain OIDC with PKCE. Signature checking is against AgentID's public keys, and verification fails closed — a token that can't prove actor_type = agent never gets in.",
+      "status": "none"
+    },
+    {
+      "id": "s5",
+      "position": 4,
+      "layout": "pillars",
+      "props": {
+        "title": "Safe by design.",
+        "items": [
+          {
+            "title": "Just-in-time accounts",
+            "body": "A verified agent gets a dedicated account the first time it signs in — no shared logins, no pre-created users."
+          },
+          {
+            "title": "Never an administrator",
+            "body": "Agent accounts can never be granted administrator capabilities. The ceiling is enforced by the plugin itself."
+          },
+          {
+            "title": "Revoke one agent",
+            "body": "Every agent is its own account and its own token. Remove the agent, keep every human credential untouched."
+          }
+        ]
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "Two hard guarantees: agents are provisioned just-in-time as their own accounts, and the admin role is off the table for them, period.",
+      "status": "none"
+    },
+    {
+      "id": "s6",
+      "position": 5,
+      "layout": "bento",
+      "props": {
+        "kicker": "Key features",
+        "title": "What ships in the box.",
+        "tiles": [
+          {
+            "k": "01",
+            "title": "AgentID sign-in",
+            "body": "One-tap OIDC + PKCE login screen for agents, alongside the normal WordPress form.",
+            "c": 3,
+            "variant": "accent"
+          },
+          {
+            "k": "02",
+            "title": "Verified signatures",
+            "body": "ES256 checks against AgentID's public keys on every sign-in.",
+            "c": 3
+          },
+          {
+            "k": "03",
+            "title": "Owner attribution",
+            "body": "Every agent account records its verified human owner.",
+            "c": 2
+          },
+          {
+            "k": "04",
+            "title": "Fail-closed policy",
+            "body": "actor_type = agent or no entry — no exceptions.",
+            "c": 2
+          },
+          {
+            "k": "05",
+            "title": "Open source",
+            "body": "GPL plugin, audit it line by line on GitHub.",
+            "c": 2
+          }
+        ]
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "Quick tour of the feature set — emphasize that everything runs on standards and that the code is open for audit.",
+      "status": "none"
+    },
+    {
+      "id": "s7",
+      "position": 6,
+      "layout": "bigNumber",
+      "props": {
+        "kicker": "Status",
+        "value": "0.1.4",
+        "caption": "submitted to WordPress.org on October 14, 2026 — awaiting review. The first AgentID sign-in plugin for WordPress, and fully open source.",
+        "foot": "github.com/Mike-Demo/agentic-agent-sso"
+      },
+      "background": { "type": "color", "color": "var(--bg)" },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "Where we are: v0.1.4 is in the WordPress.org review queue as of Oct 14, 2026. First plugin of its kind — the AgentID story for WordPress starts here.",
+      "status": "none"
+    },
+    {
+      "id": "s8",
+      "position": 7,
+      "layout": "cover",
+      "props": {
+        "kicker": "Agentic Agent SSO",
+        "title": "Give every agent ==its own identity==.",
+        "subtitle": "Open source, standards-based, and ready for your WordPress site.",
+        "foot": "github.com/Mike-Demo/agentic-agent-sso"
+      },
+      "background": {
+        "type": "gradient",
+        "from": "#06080d",
+        "to": "#0a1a2e",
+        "angle": 160
+      },
+      "animation": "cascade",
+      "transition": null,
+      "nav": null,
+      "notes": "Close on the ask: try the plugin, star the repo, and join the WordPress.org review wait. Agents deserve real sign-in.",
+      "status": "none"
+    }
+  ]
+}
