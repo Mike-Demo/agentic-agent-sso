@@ -1,10 +1,10 @@
-=== Agentic Agent SSO ===
+=== AgentKey Sign-In for AgentID ===
 Contributors: mpmike
 Tags: sso, oidc, openid-connect, ai-agents, woocommerce
 Requires at least: 6.3
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.4
+Stable tag: 0.1.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,7 @@ AgentID on the web: https://www.agentid.com — AgentMail/AgentID on GitHub: htt
 
 = Disclaimer =
 
-Agentic Agent SSO is an independent, open-source community project. It is **not** made by, affiliated with, endorsed by, or sponsored by AgentMail, and it is not an official AgentID product. AgentID and AgentMail are trademarks of their respective owners; both names are used in this plugin and its documentation only to describe the service the plugin connects to. Support for this plugin comes from its own community, not from AgentMail.
+AgentKey Sign-In for AgentID is an independent, open-source community project. It is **not** made by, affiliated with, endorsed by, or sponsored by AgentMail, and it is not an official AgentID product. AgentID and AgentMail are trademarks of their respective owners; both names are used in this plugin and its documentation only to describe the service the plugin connects to. Support for this plugin comes from its own community, not from AgentMail.
 
 = How it works =
 
@@ -48,13 +48,13 @@ Agentic Agent SSO is an independent, open-source community project. It is **not*
 
 1. Upload the plugin, or install it from the Plugins screen, and activate it.
 2. Create a free application for your site at console.agentid.com.
-3. In the AgentID console, register the Redirect URI shown on this plugin's settings page (Settings → Agentic Agent SSO), set token endpoint authentication to `client_secret_basic`, and require PKCE (S256).
-4. Copy the Client ID (and Client Secret, if your application has one) into Settings → Agentic Agent SSO and save.
+3. In the AgentID console, register the Redirect URI shown on this plugin's settings page (Settings → AgentKey Sign-In for AgentID), set token endpoint authentication to `client_secret_basic`, and require PKCE (S256).
+4. Copy the Client ID (and Client Secret, if your application has one) into Settings → AgentKey Sign-In for AgentID and save.
 5. Click "Test connection to AgentID". Then sign out and try the "Sign in with AgentID" button.
 
 == Screenshots ==
 
-1. Settings → Agentic Agent SSO: the setup wizard walks through creating your AgentID application, registering the redirect URI, and testing the connection.
+1. Settings → AgentKey Sign-In for AgentID: the setup wizard walks through creating your AgentID application, registering the redirect URI, and testing the connection.
 2. "Sign in with AgentID" on the WordPress login form. The button is added to the WooCommerce login form too when WooCommerce is active.
 3. Link an agent to your account from your profile. The agent still gets its own account — it never signs in as you.
 4. An agent account in the admin: its AgentID identity and human owner on record. Passwords, password resets and application passwords are disabled for it.
@@ -111,6 +111,9 @@ Suggested privacy-policy text: "If you sign in with AgentID, we receive your age
 
 == Upgrade Notice ==
 
+= 0.1.5 =
+Renamed to AgentKey Sign-In for AgentID at the WordPress.org review team's request — the old name was too descriptive. Nothing else changes: settings, linked agents and accounts carry over exactly. Recommended for all sites.
+
 = 0.1.4 =
 Hardening release: identity data from the userinfo endpoint is now merged through a type-checked whitelist so it can never override verified token claims, and a malformed discovery document fails cleanly instead of erroring. Recommended for all sites.
 
@@ -124,6 +127,11 @@ Renamed to Agentic Agent SSO. The Gutenberg block now loads correctly in the edi
 Security hardening release: unconditional denial of site-administration capability for agent accounts, stricter ID token validation, and multisite-safe uninstall.
 
 == Changelog ==
+
+= 0.1.5 =
+* Renamed: the plugin is now "AgentKey Sign-In for AgentID" (slug agentkey-sign-in-agentid), renamed at the WordPress.org Plugin Directory review team's request because the previous name was largely descriptive and not distinctive enough. The text domain follows the new slug; settings, options and account data are unchanged (they use the agentid_ prefix, which names the service the plugin connects to, not the plugin).
+* Fixed: the readme Contributors line now lists the WordPress.org account that owns the plugin.
+* Documentation: the sign-in flow's request-integrity model — where WordPress nonces apply, and where the OAuth state parameter and PKCE serve as the CSRF control — is now documented at the top of the auth class.
 
 = 0.1.4 =
 * Hardening: userinfo claims are merged into the verified identity through a whitelist of profile fields, each accepted only as the expected scalar type — userinfo can no longer overwrite verified token claims (subject, actor type, audience) or introduce non-scalar values into provisioning.

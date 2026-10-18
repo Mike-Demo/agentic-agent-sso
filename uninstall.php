@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall cleanup for Agentic Agent SSO.
+ * Uninstall cleanup for AgentKey Sign-In for AgentID.
  *
  * Removes the plugin's options and cached transients. User accounts
  * created for agents are intentionally left in place — they belong to
@@ -10,7 +10,7 @@
  * (see AgentID_Auth::reconnect_retained_account()); accounts with a
  * verified email need an administrator to reconnect them (readme FAQ).
  *
- * @package AgenticAgentSSO
+ * @package AgentKeySignIn
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {

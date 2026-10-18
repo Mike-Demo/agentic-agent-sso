@@ -39,7 +39,7 @@
  *  - Provisioned accounts never receive a role that can administer
  *    the site.
  *
- * @package AgenticAgentSSO
+ * @package AgentKeySignIn
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -126,19 +126,19 @@ class AgentID_Auth {
 	 */
 	public static function error_messages() {
 		return array(
-			'not_configured'  => __( 'AgentID sign-in is not configured on this site yet.', 'agentic-agent-sso' ),
-			'discovery'       => __( 'This site could not reach AgentID. Please try again later.', 'agentic-agent-sso' ),
-			'state'           => __( 'The sign-in link has expired or does not belong to this browser. Please start again.', 'agentic-agent-sso' ),
-			'denied'          => __( 'The sign-in was cancelled at AgentID.', 'agentic-agent-sso' ),
-			'token'           => __( 'AgentID did not complete the sign-in. Please start again.', 'agentic-agent-sso' ),
-			'verify'          => __( 'The AgentID identity could not be verified.', 'agentic-agent-sso' ),
-			'email_taken'     => __( 'The agent\'s email address already belongs to a different account on this site, so sign-in was refused. Ask the site owner to resolve the conflict.', 'agentic-agent-sso' ),
-			'no_role'         => __( 'No role on this site is available for agent accounts right now, so sign-in was refused. Ask the site owner to check the plugin settings.', 'agentic-agent-sso' ),
-			'disabled'        => __( 'This agent account has been disabled by the site owner.', 'agentic-agent-sso' ),
-			'provision'       => __( 'An account could not be created for this agent.', 'agentic-agent-sso' ),
-			'link_no_user'    => __( 'Please sign in to your account first, then start linking again.', 'agentic-agent-sso' ),
-			'link_nonce'      => __( 'That linking link has expired. Please start again from your profile.', 'agentic-agent-sso' ),
-			'link_sub_in_use' => __( 'That agent is already linked to a different account.', 'agentic-agent-sso' ),
+			'not_configured'  => __( 'AgentID sign-in is not configured on this site yet.', 'agentkey-sign-in-agentid' ),
+			'discovery'       => __( 'This site could not reach AgentID. Please try again later.', 'agentkey-sign-in-agentid' ),
+			'state'           => __( 'The sign-in link has expired or does not belong to this browser. Please start again.', 'agentkey-sign-in-agentid' ),
+			'denied'          => __( 'The sign-in was cancelled at AgentID.', 'agentkey-sign-in-agentid' ),
+			'token'           => __( 'AgentID did not complete the sign-in. Please start again.', 'agentkey-sign-in-agentid' ),
+			'verify'          => __( 'The AgentID identity could not be verified.', 'agentkey-sign-in-agentid' ),
+			'email_taken'     => __( 'The agent\'s email address already belongs to a different account on this site, so sign-in was refused. Ask the site owner to resolve the conflict.', 'agentkey-sign-in-agentid' ),
+			'no_role'         => __( 'No role on this site is available for agent accounts right now, so sign-in was refused. Ask the site owner to check the plugin settings.', 'agentkey-sign-in-agentid' ),
+			'disabled'        => __( 'This agent account has been disabled by the site owner.', 'agentkey-sign-in-agentid' ),
+			'provision'       => __( 'An account could not be created for this agent.', 'agentkey-sign-in-agentid' ),
+			'link_no_user'    => __( 'Please sign in to your account first, then start linking again.', 'agentkey-sign-in-agentid' ),
+			'link_nonce'      => __( 'That linking link has expired. Please start again from your profile.', 'agentkey-sign-in-agentid' ),
+			'link_sub_in_use' => __( 'That agent is already linked to a different account.', 'agentkey-sign-in-agentid' ),
 		);
 	}
 
@@ -561,7 +561,7 @@ class AgentID_Auth {
 			: $username;
 		if ( ! empty( $claims['owner_name'] ) && is_string( $claims['owner_name'] ) ) {
 			/* translators: 1: agent display name, 2: owner name */
-			$display = sprintf( __( '%1$s (agent of %2$s)', 'agentic-agent-sso' ), $display, sanitize_text_field( $claims['owner_name'] ) );
+			$display = sprintf( __( '%1$s (agent of %2$s)', 'agentkey-sign-in-agentid' ), $display, sanitize_text_field( $claims['owner_name'] ) );
 		}
 
 		$role = self::safe_default_role();

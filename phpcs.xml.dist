@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Agentic Agent SSO">
+<ruleset name="AgentKey Sign-In for AgentID">
 	<description>WP Coding Standards for this plugin, per the WP Codex / Plugin Developer Handbook.</description>
 
 	<file>.</file>

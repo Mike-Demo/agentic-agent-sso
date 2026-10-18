@@ -1,8 +1,8 @@
 <?php
 /**
- * Admin settings + setup wizard for Agentic Agent SSO.
+ * Admin settings + setup wizard for AgentKey Sign-In for AgentID.
  *
- * @package AgenticAgentSSO
+ * @package AgentKeySignIn
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class AgentID_Settings {
 
-	const PAGE_SLUG = 'agentic-agent-sso';
+	const PAGE_SLUG = 'agentkey-sign-in-agentid';
 
 	/**
 	 * Register hooks.
@@ -32,8 +32,8 @@ class AgentID_Settings {
 	 */
 	public static function add_menu() {
 		add_options_page(
-			__( 'Agentic Agent SSO', 'agentic-agent-sso' ),
-			__( 'Agentic Agent SSO', 'agentic-agent-sso' ),
+			__( 'AgentKey Sign-In for AgentID', 'agentkey-sign-in-agentid' ),
+			__( 'AgentKey Sign-In for AgentID', 'agentkey-sign-in-agentid' ),
 			'manage_options',
 			self::PAGE_SLUG,
 			array( __CLASS__, 'render_page' )
@@ -193,11 +193,11 @@ class AgentID_Settings {
 			array(
 				'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
 				'nonce'      => wp_create_nonce( 'agentid_test_connection' ),
-				'testing'    => __( 'Testing…', 'agentic-agent-sso' ),
-				'copied'     => __( 'Copied', 'agentic-agent-sso' ),
-				'copy'       => __( 'Copy', 'agentic-agent-sso' ),
-				'copyFailed' => __( 'Copy failed — select the text and copy it manually.', 'agentic-agent-sso' ),
-				'testFailed' => __( 'Test failed.', 'agentic-agent-sso' ),
+				'testing'    => __( 'Testing…', 'agentkey-sign-in-agentid' ),
+				'copied'     => __( 'Copied', 'agentkey-sign-in-agentid' ),
+				'copy'       => __( 'Copy', 'agentkey-sign-in-agentid' ),
+				'copyFailed' => __( 'Copy failed — select the text and copy it manually.', 'agentkey-sign-in-agentid' ),
+				'testFailed' => __( 'Test failed.', 'agentkey-sign-in-agentid' ),
 			)
 		);
 	}
@@ -215,9 +215,9 @@ class AgentID_Settings {
 		}
 		printf(
 			'<div class="notice notice-warning"><p>%s <a href="%s">%s</a></p></div>',
-			esc_html__( 'Agentic Agent SSO is active but no AgentID application is connected yet.', 'agentic-agent-sso' ),
+			esc_html__( 'AgentKey Sign-In for AgentID is active but no AgentID application is connected yet.', 'agentkey-sign-in-agentid' ),
 			esc_url( admin_url( 'options-general.php?page=' . self::PAGE_SLUG ) ),
-			esc_html__( 'Finish setup', 'agentic-agent-sso' )
+			esc_html__( 'Finish setup', 'agentkey-sign-in-agentid' )
 		);
 	}
 
@@ -227,7 +227,7 @@ class AgentID_Settings {
 	public static function ajax_test_connection() {
 		check_ajax_referer( 'agentid_test_connection' );
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Not allowed.', 'agentic-agent-sso' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'Not allowed.', 'agentkey-sign-in-agentid' ) ), 403 );
 		}
 		$discovery = AgentID_OIDC::discovery( true );
 		if ( is_wp_error( $discovery ) ) {
@@ -241,7 +241,7 @@ class AgentID_Settings {
 			array(
 				'message' => sprintf(
 					/* translators: 1: issuer, 2: number of signing keys */
-					__( 'Connected. Issuer %1$s responded and published %2$d signing key(s).', 'agentic-agent-sso' ),
+					__( 'Connected. Issuer %1$s responded and published %2$d signing key(s).', 'agentkey-sign-in-agentid' ),
 					$discovery['issuer'],
 					count( $jwks['keys'] )
 				),
@@ -262,93 +262,93 @@ class AgentID_Settings {
 		$has_secret = is_array( $options ) && ! empty( $options['client_secret'] );
 		?>
 		<div class="wrap">
-			<h1><?php echo esc_html__( 'Agentic Agent SSO', 'agentic-agent-sso' ); ?></h1>
-			<p><?php echo esc_html__( 'Let verified AI agents sign in to this site as themselves — with a human owner on record — instead of sharing a person\'s password.', 'agentic-agent-sso' ); ?></p>
+			<h1><?php echo esc_html__( 'AgentKey Sign-In for AgentID', 'agentkey-sign-in-agentid' ); ?></h1>
+			<p><?php echo esc_html__( 'Let verified AI agents sign in to this site as themselves — with a human owner on record — instead of sharing a person\'s password.', 'agentkey-sign-in-agentid' ); ?></p>
 			<p>
-				<?php echo esc_html__( 'This is an independent, community-built integration. It is not affiliated with, endorsed by, or sponsored by AgentMail. AgentID is AgentMail\'s sign-in service for AI agents — credit and thanks to the AgentID project:', 'agentic-agent-sso' ); ?>
+				<?php echo esc_html__( 'This is an independent, community-built integration. It is not affiliated with, endorsed by, or sponsored by AgentMail. AgentID is AgentMail\'s sign-in service for AI agents — credit and thanks to the AgentID project:', 'agentkey-sign-in-agentid' ); ?>
 				<a href="https://www.agentid.com" target="_blank" rel="noopener noreferrer">agentid.com</a> ·
 				<a href="https://github.com/agentmail-to" target="_blank" rel="noopener noreferrer">github.com/agentmail-to</a>
 			</p>
 
-			<h2><?php echo esc_html__( 'Setup', 'agentic-agent-sso' ); ?></h2>
+			<h2><?php echo esc_html__( 'Setup', 'agentkey-sign-in-agentid' ); ?></h2>
 			<ol>
 				<li>
-					<?php echo esc_html__( 'Create a free application for this site in the AgentID console (one application per site; only you can do this for your site).', 'agentic-agent-sso' ); ?>
+					<?php echo esc_html__( 'Create a free application for this site in the AgentID console (one application per site; only you can do this for your site).', 'agentkey-sign-in-agentid' ); ?>
 					<a href="https://console.agentid.com" target="_blank" rel="noopener noreferrer">console.agentid.com</a>
 				</li>
 				<li>
-					<?php echo esc_html__( 'In that application, register this exact Redirect URI:', 'agentic-agent-sso' ); ?>
+					<?php echo esc_html__( 'In that application, register this exact Redirect URI:', 'agentkey-sign-in-agentid' ); ?>
 					<br>
 					<code id="agentid-redirect-uri"><?php echo esc_html( agentid_sso_redirect_uri() ); ?></code>
-					<button type="button" class="button button-small" data-copy-target="agentid-redirect-uri"><?php echo esc_html__( 'Copy', 'agentic-agent-sso' ); ?></button>
+					<button type="button" class="button button-small" data-copy-target="agentid-redirect-uri"><?php echo esc_html__( 'Copy', 'agentkey-sign-in-agentid' ); ?></button>
 					<br>
-					<?php echo esc_html__( 'Token endpoint authentication: client_secret_basic. Require PKCE (S256). Request the owner_profile and owner_email scopes if you want owner details attached to agent accounts.', 'agentic-agent-sso' ); ?>
+					<?php echo esc_html__( 'Token endpoint authentication: client_secret_basic. Require PKCE (S256). Request the owner_profile and owner_email scopes if you want owner details attached to agent accounts.', 'agentkey-sign-in-agentid' ); ?>
 				</li>
-				<li><?php echo esc_html__( 'Paste the Client ID (and Client Secret, if your application has one) below, save, then test the connection.', 'agentic-agent-sso' ); ?></li>
+				<li><?php echo esc_html__( 'Paste the Client ID (and Client Secret, if your application has one) below, save, then test the connection.', 'agentkey-sign-in-agentid' ); ?></li>
 			</ol>
 
 			<form method="post" action="options.php">
 				<?php settings_fields( 'agentid_sso_group' ); ?>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="agentid_client_id"><?php echo esc_html__( 'Client ID', 'agentic-agent-sso' ); ?></label></th>
+						<th scope="row"><label for="agentid_client_id"><?php echo esc_html__( 'Client ID', 'agentkey-sign-in-agentid' ); ?></label></th>
 						<td>
 							<input type="text" class="regular-text" id="agentid_client_id" name="agentid_sso_options[client_id]" value="<?php echo esc_attr( agentid_sso_get_option( 'client_id', '' ) ); ?>" autocomplete="off">
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="agentid_client_secret"><?php echo esc_html__( 'Client Secret', 'agentic-agent-sso' ); ?></label></th>
+						<th scope="row"><label for="agentid_client_secret"><?php echo esc_html__( 'Client Secret', 'agentkey-sign-in-agentid' ); ?></label></th>
 						<td>
-							<input type="password" class="regular-text" id="agentid_client_secret" name="agentid_sso_options[client_secret]" value="" autocomplete="new-password" placeholder="<?php echo $has_secret ? esc_attr__( 'Stored — leave blank to keep', 'agentic-agent-sso' ) : ''; ?>">
+							<input type="password" class="regular-text" id="agentid_client_secret" name="agentid_sso_options[client_secret]" value="" autocomplete="new-password" placeholder="<?php echo $has_secret ? esc_attr__( 'Stored — leave blank to keep', 'agentkey-sign-in-agentid' ) : ''; ?>">
 							<?php if ( $has_secret ) : ?>
 								<label>
 									<input type="checkbox" name="agentid_sso_options[clear_secret]" value="1">
-									<?php echo esc_html__( 'Remove the stored secret (public client / PKCE-only)', 'agentic-agent-sso' ); ?>
+									<?php echo esc_html__( 'Remove the stored secret (public client / PKCE-only)', 'agentkey-sign-in-agentid' ); ?>
 								</label>
 							<?php endif; ?>
-							<p class="description"><?php echo esc_html__( 'Stored in this site\'s database like other SSO credentials. Never shown again after saving.', 'agentic-agent-sso' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'Stored in this site\'s database like other SSO credentials. Never shown again after saving.', 'agentkey-sign-in-agentid' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="agentid_scopes"><?php echo esc_html__( 'Scopes', 'agentic-agent-sso' ); ?></label></th>
+						<th scope="row"><label for="agentid_scopes"><?php echo esc_html__( 'Scopes', 'agentkey-sign-in-agentid' ); ?></label></th>
 						<td>
 							<input type="text" class="regular-text" id="agentid_scopes" name="agentid_sso_options[scopes]" value="<?php echo esc_attr( agentid_sso_get_option( 'scopes', '' ) ); ?>">
-							<p class="description"><?php echo esc_html__( 'Space-separated. Allowed: openid, email, profile, owner_profile, owner_email. The openid scope is always included.', 'agentic-agent-sso' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'Space-separated. Allowed: openid, email, profile, owner_profile, owner_email. The openid scope is always included.', 'agentkey-sign-in-agentid' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="agentid_default_role"><?php echo esc_html__( 'Default role for new agent accounts', 'agentic-agent-sso' ); ?></label></th>
+						<th scope="row"><label for="agentid_default_role"><?php echo esc_html__( 'Default role for new agent accounts', 'agentkey-sign-in-agentid' ); ?></label></th>
 						<td>
 							<select id="agentid_default_role" name="agentid_sso_options[default_role]">
 								<?php foreach ( self::provisionable_roles() as $slug => $label ) : ?>
 									<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( agentid_sso_get_option( 'default_role', 'subscriber' ), $slug ); ?>><?php echo esc_html( $label ); ?></option>
 								<?php endforeach; ?>
 							</select>
-							<p class="description"><?php echo esc_html__( 'Roles that can administer the site are never offered here, and are refused if configured by other means.', 'agentic-agent-sso' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'Roles that can administer the site are never offered here, and are refused if configured by other means.', 'agentkey-sign-in-agentid' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php echo esc_html__( 'Owner linking', 'agentic-agent-sso' ); ?></th>
+						<th scope="row"><?php echo esc_html__( 'Owner linking', 'agentkey-sign-in-agentid' ); ?></th>
 						<td>
 							<label>
 								<input type="checkbox" name="agentid_sso_options[link_by_owner_email]" value="1" <?php checked( agentid_sso_get_option( 'link_by_owner_email', 1 ), 1 ); ?>>
-								<?php echo esc_html__( 'When an agent\'s verified owner email matches an existing user on this site, record that user as the agent account\'s owner. The agent still gets its own account and never signs in as the owner.', 'agentic-agent-sso' ); ?>
+								<?php echo esc_html__( 'When an agent\'s verified owner email matches an existing user on this site, record that user as the agent account\'s owner. The agent still gets its own account and never signs in as the owner.', 'agentkey-sign-in-agentid' ); ?>
 							</label>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="agentid_session_hours"><?php echo esc_html__( 'Agent session length (hours)', 'agentic-agent-sso' ); ?></label></th>
+						<th scope="row"><label for="agentid_session_hours"><?php echo esc_html__( 'Agent session length (hours)', 'agentkey-sign-in-agentid' ); ?></label></th>
 						<td>
 							<input type="number" min="1" max="72" id="agentid_session_hours" name="agentid_sso_options[session_hours]" value="<?php echo esc_attr( (string) agentid_sso_get_option( 'session_hours', 12 ) ); ?>">
-							<p class="description"><?php echo esc_html__( 'AgentID revocation stops new sign-ins but does not end sessions a site has already issued, so agent sessions are kept short. 1–72 hours.', 'agentic-agent-sso' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'AgentID revocation stops new sign-ins but does not end sessions a site has already issued, so agent sessions are kept short. 1–72 hours.', 'agentkey-sign-in-agentid' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php echo esc_html__( 'Login button', 'agentic-agent-sso' ); ?></th>
+						<th scope="row"><?php echo esc_html__( 'Login button', 'agentkey-sign-in-agentid' ); ?></th>
 						<td>
 							<label>
 								<input type="checkbox" name="agentid_sso_options[show_login_button]" value="1" <?php checked( agentid_sso_get_option( 'show_login_button', 1 ), 1 ); ?>>
-								<?php echo esc_html__( 'Show "Sign in with AgentID" on the WP login form (and the WooCommerce login form, if WooCommerce is active). You can also use the [agentid_login] shortcode or the AgentID Login Button block anywhere.', 'agentic-agent-sso' ); ?>
+								<?php echo esc_html__( 'Show "Sign in with AgentID" on the WP login form (and the WooCommerce login form, if WooCommerce is active). You can also use the [agentid_login] shortcode or the AgentID Login Button block anywhere.', 'agentkey-sign-in-agentid' ); ?>
 							</label>
 						</td>
 					</tr>
@@ -356,12 +356,12 @@ class AgentID_Settings {
 				<?php submit_button(); ?>
 			</form>
 
-			<h2><?php echo esc_html__( 'Connection test', 'agentic-agent-sso' ); ?></h2>
+			<h2><?php echo esc_html__( 'Connection test', 'agentkey-sign-in-agentid' ); ?></h2>
 			<p>
-				<button type="button" class="button" id="agentid-test-connection"><?php echo esc_html__( 'Test connection to AgentID', 'agentic-agent-sso' ); ?></button>
+				<button type="button" class="button" id="agentid-test-connection"><?php echo esc_html__( 'Test connection to AgentID', 'agentkey-sign-in-agentid' ); ?></button>
 				<span id="agentid-test-result" role="status"></span>
 			</p>
-			<p class="description"><?php echo esc_html__( 'Fetches the live discovery document and signing keys from auth.agentid.com. A full sign-in test needs a real agent: after saving your credentials, sign out and use the "Sign in with AgentID" button.', 'agentic-agent-sso' ); ?></p>
+			<p class="description"><?php echo esc_html__( 'Fetches the live discovery document and signing keys from auth.agentid.com. A full sign-in test needs a real agent: after saving your credentials, sign out and use the "Sign in with AgentID" button.', 'agentkey-sign-in-agentid' ); ?></p>
 		</div>
 		<?php
 	}

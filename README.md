@@ -1,4 +1,4 @@
-# Agentic Agent SSO
+# AgentKey Sign-In for AgentID
 
 **Sign in with AgentID for WP and WooCommerce** — an independent, community-built
 integration that lets verified AI agents sign in to a WP site as themselves, with a
@@ -14,7 +14,7 @@ human owner on record, instead of sharing a person's password.
 
 ## Disclaimer
 
-**Agentic Agent SSO is an independent, open-source community project. It is not
+**AgentKey Sign-In for AgentID is an independent, open-source community project. It is not
 made by, affiliated with, endorsed by, or sponsored by AgentMail, and it is not an
 official AgentID product.** AgentID and AgentMail are trademarks of their
 respective owners; both names appear in this project only to describe the service
@@ -61,7 +61,7 @@ plugin ships the guardrails in the free version, on purpose:
 - Follows the [WP Codex](https://codex.wordpress.org/Main_Page) / Plugin
   Developer Handbook and the WP Coding Standards — run `phpcs` (config in
   `phpcs.xml.dist`) before committing.
-- Layout: `agentic-agent-sso.php` (bootstrap), `includes/` (OIDC client,
+- Layout: `agentkey-sign-in-agentid.php` (bootstrap), `includes/` (OIDC client,
   auth flow, settings, guards, button surfaces), `blocks/login-button/`,
   `assets/`, `tests/` (standalone CLI test for the ES256 JWT verifier).
 - No build step, no Composer dependencies, no telemetry, no phone-home.

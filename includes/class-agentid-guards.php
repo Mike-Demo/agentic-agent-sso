@@ -20,7 +20,7 @@
  *    because AgentID key revocation stops new sign-ins but does not
  *    end sessions this site has already issued.
  *
- * @package AgenticAgentSSO
+ * @package AgentKeySignIn
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -82,7 +82,7 @@ class AgentID_Guards {
 		if ( AgentID_Auth::is_agent_user( $result->ID ) ) {
 			return new WP_Error(
 				'agentid_password_disabled',
-				__( 'This is an agent account. It can only sign in with AgentID.', 'agentic-agent-sso' )
+				__( 'This is an agent account. It can only sign in with AgentID.', 'agentkey-sign-in-agentid' )
 			);
 		}
 		return $result;
@@ -264,11 +264,11 @@ class AgentID_Guards {
 			return;
 		}
 		?>
-		<h2><?php echo esc_html__( 'AgentID', 'agentic-agent-sso' ); ?></h2>
+		<h2><?php echo esc_html__( 'AgentID', 'agentkey-sign-in-agentid' ); ?></h2>
 		<table class="form-table" role="presentation">
 			<?php if ( $is_agent ) : ?>
 				<tr>
-					<th><?php echo esc_html__( 'Agent identity', 'agentic-agent-sso' ); ?></th>
+					<th><?php echo esc_html__( 'Agent identity', 'agentkey-sign-in-agentid' ); ?></th>
 					<td>
 						<code><?php echo esc_html( (string) get_user_meta( $profile_user->ID, 'agentid_sub', true ) ); ?></code>
 						<p class="description">
@@ -278,12 +278,12 @@ class AgentID_Guards {
 							if ( '' !== $owner_name || '' !== $owner_email ) {
 								printf(
 									/* translators: 1: owner name, 2: owner email */
-									esc_html__( 'Owner on record: %1$s (%2$s). This account signs in only with AgentID; passwords, password resets and application passwords are disabled for it.', 'agentic-agent-sso' ),
+									esc_html__( 'Owner on record: %1$s (%2$s). This account signs in only with AgentID; passwords, password resets and application passwords are disabled for it.', 'agentkey-sign-in-agentid' ),
 									esc_html( $owner_name ),
 									esc_html( $owner_email )
 								);
 							} else {
-								echo esc_html__( 'This account signs in only with AgentID; passwords, password resets and application passwords are disabled for it.', 'agentic-agent-sso' );
+								echo esc_html__( 'This account signs in only with AgentID; passwords, password resets and application passwords are disabled for it.', 'agentkey-sign-in-agentid' );
 							}
 							?>
 						</p>
@@ -292,17 +292,17 @@ class AgentID_Guards {
 			<?php endif; ?>
 			<?php if ( (int) get_current_user_id() === (int) $profile_user->ID && agentid_sso_is_configured() ) : ?>
 				<tr>
-					<th><?php echo esc_html__( 'Link your agent', 'agentic-agent-sso' ); ?></th>
+					<th><?php echo esc_html__( 'Link your agent', 'agentkey-sign-in-agentid' ); ?></th>
 					<td>
 						<?php if ( '' !== $linked_sub ) : ?>
 							<code><?php echo esc_html( $linked_sub ); ?></code>
-							<p class="description"><?php echo esc_html__( 'This agent identity is linked to your account as its owner.', 'agentic-agent-sso' ); ?></p>
+							<p class="description"><?php echo esc_html__( 'This agent identity is linked to your account as its owner.', 'agentkey-sign-in-agentid' ); ?></p>
 						<?php else : ?>
-							<a class="button" href="<?php echo esc_url( add_query_arg( 'agentid_link_nonce', wp_create_nonce( 'agentid_link_start' ), agentid_sso_start_url( '', 'link' ) ) ); ?>"><?php echo esc_html__( 'Link an AgentID agent', 'agentic-agent-sso' ); ?></a>
-							<p class="description"><?php echo esc_html__( 'Signs you through AgentID once and records that agent as yours. The agent still gets its own account on this site — it never signs in as you.', 'agentic-agent-sso' ); ?></p>
+							<a class="button" href="<?php echo esc_url( add_query_arg( 'agentid_link_nonce', wp_create_nonce( 'agentid_link_start' ), agentid_sso_start_url( '', 'link' ) ) ); ?>"><?php echo esc_html__( 'Link an AgentID agent', 'agentkey-sign-in-agentid' ); ?></a>
+							<p class="description"><?php echo esc_html__( 'Signs you through AgentID once and records that agent as yours. The agent still gets its own account on this site — it never signs in as you.', 'agentkey-sign-in-agentid' ); ?></p>
 						<?php endif; ?>
 						<?php if ( isset( $_GET['agentid_linked'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Confirmation banner only. ?>
-							<p><strong><?php echo esc_html__( 'Agent linked.', 'agentic-agent-sso' ); ?></strong></p>
+							<p><strong><?php echo esc_html__( 'Agent linked.', 'agentkey-sign-in-agentid' ); ?></strong></p>
 						<?php endif; ?>
 					</td>
 				</tr>

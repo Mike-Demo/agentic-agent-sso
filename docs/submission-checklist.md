@@ -1,18 +1,21 @@
-# WordPress.org submission checklist — Agentic Agent SSO
+# WordPress.org submission checklist — AgentKey Sign-In for AgentID
 
-Status as of 2026-10-14 (evening): **SUBMITTED and awaiting review.** The v0.1.4
-zip was uploaded under the owner's WordPress.org account (mpmike); the directory
-assigned the initial slug `agentic-agent-sso`, the automated plugin scan passed,
-and the status is "Awaiting Review" (typical first response 1–10 days; review
-email goes to the account email from plugins@wordpress.org). The remaining steps
-below apply once the review concludes.
+Status as of 2026-10-18: **SUBMITTED; review round 1 in progress.** The plugin was
+submitted on 2026-10-14 as "Agentic Agent SSO" (initial slug `agentic-agent-sso`,
+automated scan passed). The review team's automated pre-review (2026-10-18)
+pended the submission with three items: rename for distinctiveness, a
+nonce/permissions audit, and the readme Contributors username. At the owner's
+choice the plugin is renamed **AgentKey Sign-In for AgentID** (new slug
+`agentkey-sign-in-agentid`, requested in the reply on the review thread);
+v0.1.5 carries the rename and the other fixes. The remaining steps below apply
+once the review concludes.
 
 ## The package
 
 | Item | State |
 | --- | --- |
-| Plugin zip | `agentic-agent-sso-0.1.4.zip` — folder `agentic-agent-sso/`, built per `.distignore` (no dev files, no `.wordpress-org/`) |
-| Version / stable tag | 0.1.4 |
+| Plugin zip | `agentkey-sign-in-agentid-0.1.5.zip` — folder `agentkey-sign-in-agentid/`, built per `.distignore` (no dev files, no `.wordpress-org/`) |
+| Version / stable tag | 0.1.5 |
 | License | GPLv2 (LICENSE file included) |
 | Plugin Check (official, v2.1.0) | 0 errors / 0 warnings on the v0.1.2-era package; a post-submission run flagged one readme warning (0.1.3 upgrade notice 305 chars, limit 300) — fixed to 255 chars and the corrected zip re-uploaded to the pending submission pre-review on 2026-10-14, see TESTING.md |
 | PHPCS (WPCS + PHPCompatibilityWP) | 0 errors / 0 warnings |
@@ -30,7 +33,7 @@ the plugin zip (`.distignore` excludes the directory).
 | `banner-1544x500.png` | 1544×500 | Listing banner, retina |
 | `icon-256x256.png` | 256×256 | Plugin icon |
 | `icon-128x128.png` | 128×128 | Plugin icon, small |
-| `screenshot-1.png` | 1440×1205 | Settings → Agentic Agent SSO setup wizard |
+| `screenshot-1.png` | 1440×1205 | Settings → AgentKey Sign-In for AgentID setup wizard |
 | `screenshot-2.png` | 1440×1000 | "Sign in with AgentID" on wp-login |
 | `screenshot-3.png` | 1440×1000 | Profile: "Link your agent" |
 | `screenshot-4.png` | 1440×1000 | Agent account: identity + owner on record, password paths disabled |
@@ -55,14 +58,14 @@ or reordered, update the captions in the same commit.
 ## Remaining steps (owner)
 
 1. Sign in at https://wordpress.org/plugins/developers/add/ with the owner's
-   WordPress.org account and upload `agentic-agent-sso-0.1.4.zip`.
+   WordPress.org account and upload the current zip (`agentkey-sign-in-agentid-0.1.5.zip` for the review-round-1 response).
 2. Wait for the review email (the plugin review team replies to the account email).
    If they request changes, fix on `main`, bump the version, rebuild the zip, and
    reply on the review thread.
 3. After approval, the SVN repo is created under
-   `https://plugins.svn.wordpress.org/agentic-agent-sso/`:
+   `https://plugins.svn.wordpress.org/agentkey-sign-in-agentid/`:
    - commit the plugin files (the zip's contents) to `trunk/`,
-   - copy `trunk/` to `tags/0.1.4/`,
+   - copy `trunk/` to `tags/0.1.5/`,
    - commit the `.wordpress-org/` files to `assets/`.
 4. Verify the live listing page renders the banner, icon, screenshots and readme
    (the readme validator at wordpress.org/plugins/developers/readme-validator/
@@ -75,3 +78,7 @@ or reordered, update the captions in the same commit.
   with credit to the AgentID project — keep both intact in future edits.
 - Do not add screenshots that show real client IDs, secrets, email addresses or
   subject identifiers; stage sample data like the 2026-10-14 captures did.
+- RECAPTURE BEFORE THE SVN COMMIT: the 2026-10-14 screenshots predate the
+  rename — screenshot-1 shows the settings page under the old name ("Agentic
+  Agent SSO"). Recapture at least screenshot-1 (check 3–5 as well) against the
+  renamed plugin before committing `assets/`.

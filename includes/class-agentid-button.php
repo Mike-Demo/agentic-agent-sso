@@ -3,7 +3,7 @@
  * "Sign in with AgentID" button surfaces: wp-login, WooCommerce
  * login, shortcode, and a Gutenberg block.
  *
- * @package AgenticAgentSSO
+ * @package AgentKeySignIn
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -50,7 +50,7 @@ class AgentID_Button {
 			return '';
 		}
 		if ( '' === $label ) {
-			$label = __( 'Sign in with AgentID', 'agentic-agent-sso' );
+			$label = __( 'Sign in with AgentID', 'agentkey-sign-in-agentid' );
 		}
 		$url = agentid_sso_start_url( $redirect_to );
 		return sprintf(
