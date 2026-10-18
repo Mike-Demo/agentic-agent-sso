@@ -2,6 +2,32 @@
 /**
  * AgentID sign-in flow: start, callback, provisioning, linking.
  *
+ * Request-integrity model (nonce / capability map):
+ *  - The two endpoints in this class are the OAuth 2.0 / OIDC flow
+ *    itself. A WordPress nonce cannot be used on them: the login
+ *    start must work for signed-out visitors (an anonymous nonce is
+ *    not bound to any session, so it would verify nothing), and the
+ *    callback request originates as a redirect from the identity
+ *    provider, which cannot carry a WordPress nonce. The OAuth
+ *    `state` parameter is the CSRF token for this protocol and is
+ *    enforced as such below: a 192-bit random value, stored
+ *    server-side in a single-use transient, matched against an
+ *    HttpOnly browser cookie with hash_equals(), and combined with
+ *    PKCE S256 and the OIDC `nonce` claim inside the verified ID
+ *    token.
+ *  - Starting a flow changes no site state beyond that transient
+ *    and cookie. The one state-changing-adjacent variant, starting
+ *    a *linking* flow for a signed-in account, additionally
+ *    requires is_user_logged_in() and a WordPress nonce
+ *    (wp_verify_nonce( ..., 'agentid_link_start' )), and the
+ *    callback re-checks that the signed-in user is the account
+ *    that started the flow before anything is linked.
+ *  - Every other request handler in this plugin follows the usual
+ *    WordPress model: settings are saved through the Settings API
+ *    (core nonce + manage_options), and the Test Connection AJAX
+ *    action runs check_ajax_referer() plus
+ *    current_user_can( 'manage_options' ) before doing any work.
+ *
  * Security properties:
  *  - state + nonce + PKCE S256 on every flow; the state is also bound
  *    to the browser with an HttpOnly cookie so an authorization code

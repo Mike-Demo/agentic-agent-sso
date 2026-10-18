@@ -1,5 +1,5 @@
 === Agentic Agent SSO ===
-Contributors: mikedemo
+Contributors: mpmike
 Tags: sso, oidc, openid-connect, ai-agents, woocommerce
 Requires at least: 6.3
 Tested up to: 7.1

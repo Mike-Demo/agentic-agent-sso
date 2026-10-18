@@ -228,3 +228,27 @@ Demo ran Plugin Check against the submitted package (2026-10-15 00:03 UTC) and i
 - A full in-Playground re-run of the checker UI was attempted twice after the fix and did not complete in the single-worker WASM environment; the fix is verified against the check's own rule (the character limit) on top of Demo's otherwise-clean report.
 - Rig note: during this work the VM restarted and the pre-screenshot backup of the original test rig was lost; that rig's admin password (a throwaway local test account) was replaced with a fresh random hash rather than restored. The test data and the agent account are unaffected.
 - Update (same evening): per the submission confirmation email's "upload a new version before we begin with the review" option, the corrected 0.1.4 zip was re-uploaded to the pending submission on 2026-10-14 — WordPress.org confirmed: "New version of Agentic Agent SSO uploaded for review." The submitted-files table now lists the new zip (v0.1.4) above the original; the submission remains Awaiting Review with slug `agentic-agent-sso` unchanged, so the reviewers will see the fixed readme from the start.
+
+## 2026-10-18 — review round 1: nonce / capability audit (issue 2) + Contributors fix (issue 3)
+
+WordPress.org's automated pre-review (AUTOPREREVIEW, 2026-10-18) pended the submission with three items: (1) rename for distinctiveness — being handled separately with Demo, (2) "Nonces and User Permissions Before Processing Requests", (3) readme Contributors lists `mikedemo` but the account owner is `mpmike`.
+
+Full audit of every request handler in the shipped files (grep for $_GET/$_POST/$_REQUEST/$_COOKIE/$_SERVER/$_FILES across all plugin PHP; no $_SERVER or $_FILES reads exist):
+
+| Handler | Input read | Integrity / permission control | Verdict |
+|---|---|---|---|
+| Settings save (options.php, via `register_setting`) | `agentid_sso_options` | Settings API core nonce + `manage_options` (menu capability and options.php), plus `sanitize_options` | Compliant, no change |
+| `wp_ajax_agentid_test_connection` | none | `check_ajax_referer( 'agentid_test_connection' )` + `current_user_can( 'manage_options' )` before any work; logged-in only (no nopriv) | Compliant, no change |
+| `AgentID_Auth::start()` with `intent=link` | `intent`, `agentid_link_nonce`, `redirect_to` | `is_user_logged_in()` + `wp_verify_nonce( ..., 'agentid_link_start' )`; `redirect_to` passed through `wp_validate_redirect()` | Compliant, no change |
+| `AgentID_Auth::start()` (sign-in) | `redirect_to` | Starts an OAuth flow; changes no site state beyond a 10-minute transient + flow cookie keyed by a 192-bit random `state`. A WP nonce cannot protect signed-out flows (anonymous nonces are session-less), so the OAuth `state` is the CSRF control, enforced at the callback | Justified; now documented in the class docblock |
+| `AgentID_Auth::callback()` | `error`, `state`, `code`, flow cookie | Request originates as a redirect from the IdP (cannot carry a WP nonce). Verified: `state` matches the single-use server-side transient (deleted before token exchange), `hash_equals()` against the HttpOnly flow cookie, PKCE S256 verifier, and the OIDC `nonce` claim inside the ES256-verified ID token | Justified; now documented in the class docblock |
+| `AgentID_Auth::finish_linking()` | verified claims only | Re-checks `get_current_user_id()` equals the `link_user_id` captured under the nonce at flow start; refuses subs already linked to another account | Compliant, no change |
+| `AgentID_Auth::login_errors()` | `agentid_code` | Maps the code to a fixed in-code message list; raw input never output; no state change | Fine, no change |
+| `AgentID_Button::on_wp_login()` | `$_REQUEST['redirect_to']` | Read-only passthrough into the sign-in link; `wp_validate_redirect()` + escaped on output | Fine, no change |
+| `AgentID_Guards::profile_section()` banner | `isset( $_GET['agentid_linked'] )` | Prints a fixed string only; no input output, no state change | Fine, no change |
+
+Changes made in this pass:
+- `includes/class-agentid-auth.php`: file docblock now carries the full request-integrity model above, so the human re-reviewer can see the nonce/capability map without reverse-engineering the flow.
+- `readme.txt`: Contributors `mikedemo` → `mpmike` (issue 3). The pre-review note calls this one non-mandatory; fixed anyway.
+
+Not changed, deliberately: no nonce was bolted onto the OAuth start/callback endpoints. For signed-out visitors a WordPress nonce is shared and session-less (it authenticates nothing), and the callback cannot receive one from the identity provider; the enforced `state` + PKCE + cookie binding is the protocol's equivalent control and is strictly stronger.
