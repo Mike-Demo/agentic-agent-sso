@@ -465,11 +465,14 @@ class AgentID_Auth {
 	 * identity meta, so after a reinstall the same agent would be
 	 * refused with email_taken forever. Undoing that automatically
 	 * is only safe for placeholder accounts: the placeholder
-	 * address is a hash of THIS subject, an address only this
-	 * plugin creates, so the account holding it can only be this
-	 * agent's retained account. Verified-email collisions still
-	 * need a human admin (see the readme FAQ) — an agent is never
-	 * signed in to an existing account by email alone.
+	 * address is a hash of THIS subject, so it can only match an
+	 * account created for this agent's sign-ins. Even then, the
+	 * account rejoins at the site's safe default role — never at
+	 * whatever role the retained shell happens to hold — and the
+	 * reconnect is refused when no safe role exists. Verified-email
+	 * collisions still need a human admin (see the readme FAQ) —
+	 * an agent is never signed in to an existing account by email
+	 * alone.
 	 *
 	 * @param int    $user_id     Existing account ID.
 	 * @param string $email       Email from the current claims.
@@ -489,14 +492,13 @@ class AgentID_Auth {
 		if ( ! $user ) {
 			return false;
 		}
+		$role = self::safe_default_role();
+		if ( null === $role ) {
+			return false;
+		}
 		update_user_meta( $user_id, 'agentid_is_agent', 1 );
-		$provisionable = AgentID_Settings::provisionable_roles();
-		$keeps_role    = array_intersect( (array) $user->roles, array_keys( $provisionable ) );
-		if ( empty( $keeps_role ) ) {
-			$role = self::safe_default_role();
-			if ( null !== $role ) {
-				$user->set_role( $role );
-			}
+		if ( array( $role ) !== (array) $user->roles ) {
+			$user->set_role( $role );
 		}
 		self::refresh_agent_meta( $user_id, $claims );
 		return $user;
@@ -504,6 +506,24 @@ class AgentID_Auth {
 
 	/**
 	 * Create the agent's own WP account from verified claims.
+	 *
+	 * Called only with claims from a verified ID token: AgentID_OIDC
+	 * has checked the signature (ES256), issuer, audience, expiry
+	 * and nonce, and actor_type is 'agent' — every check fails
+	 * closed. The local account is what the agent's WordPress
+	 * session, role and sign-in record attach to, which is why an
+	 * SSO sign-in provisions one. Accounts are matched by the
+	 * immutable sub claim, never by email; the one email-based
+	 * path is the placeholder reconnect in
+	 * reconnect_retained_account().
+	 *
+	 * The role comes from safe_default_role(): the site owner's
+	 * configured default, but only when that role grants none of
+	 * AgentID_Guards::hard_denied_caps(); otherwise the
+	 * least-privileged provisionable stock role; if none exists,
+	 * provisioning is refused. While this plugin is active, the
+	 * capability ceiling in AgentID_Guards denies the hard-denied
+	 * set to the account whatever role it holds.
 	 *
 	 * @param array $claims Verified claims.
 	 * @return WP_User|WP_Error

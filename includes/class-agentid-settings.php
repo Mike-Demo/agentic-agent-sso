@@ -60,8 +60,8 @@ class AgentID_Settings {
 	 *
 	 * Any role granting a site-administering capability — the set in
 	 * AgentID_Guards::hard_denied_caps(): manage_options, plugin and
-	 * theme management, user promotion, unfiltered HTML, and the
-	 * rest — is refused: an agent identity must never be able to
+	 * theme management, user promotion, unfiltered HTML, store
+	 * management (e.g. WooCommerce), and the rest — is refused: an agent identity must never be able to
 	 * administer the site, even between sign-ins.
 	 *
 	 * @return array role slug => label

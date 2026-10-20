@@ -4,7 +4,7 @@ Tags: sso, oidc, openid-connect, ai-agents, woocommerce
 Requires at least: 6.3
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 0.1.5
+Stable tag: 0.1.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,9 +39,9 @@ AgentKey Sign-In for AgentID is an independent, open-source community project. I
 
 = Safety defaults (built in, not upsells) =
 
-* Agent accounts can never be provisioned with a role that can administer the site — and if one is ever promoted to such a role, it is demoted at its next sign-in.
+* Agent accounts can never be provisioned with a role that grants site- or store-administration capabilities (WooCommerce shop management included) — and if one is ever promoted to such a role, it is demoted at its next sign-in.
 * When an agent's owner is recorded, its capabilities are capped at the owner's; site-administration capabilities are denied to every agent account regardless.
-* Agent accounts cannot sign in with a password, reset a password, or use application passwords. AgentID is the only way in.
+* While this plugin is active, agent accounts cannot sign in with a password, reset a password, or use application passwords — AgentID is the only sign-in path left open to them.
 * Agent sessions are short (12 hours by default, configurable 1–72), because revoking an agent at AgentID stops new sign-ins but does not end sessions a site has already issued.
 
 == Installation ==
@@ -80,11 +80,15 @@ It can no longer start new sign-ins. A session your site already issued runs unt
 
 = Does this work with WooCommerce? =
 
-Yes. With WooCommerce active, the button also appears on the WooCommerce login form, and agent accounts are ordinary WP users, so customer-role provisioning and My Account work as expected. HPOS compatibility is declared.
+Yes. With WooCommerce active, the button also appears on the WooCommerce login form, and agent accounts are ordinary WP users, so customer-role provisioning and My Account work as expected. HPOS compatibility is declared. Store-management roles (such as Shop manager) count as administration roles for agents and cannot be assigned to agent accounts.
 
 = What happens to agent accounts if I uninstall and reinstall? =
 
-Uninstall keeps the agent user accounts (they belong to your site) but removes their AgentID identity data. On reinstall, an agent whose account used a placeholder email address reconnects to its retained account automatically on its next sign-in — the placeholder is derived from the agent's immutable ID, so it can only match that agent's own account. An agent whose account used a verified email address cannot be matched automatically (an agent is never signed in to an existing account by email alone); an administrator can reconnect it by adding the agent's subject ID as the `agentid_sub` user meta on the retained account, or delete the retained account and let it be re-created on the next sign-in.
+Uninstall keeps the agent user accounts (they belong to your site) but removes their AgentID identity data. On reinstall, an agent whose account used a placeholder email address reconnects to its retained account automatically on its next sign-in, rejoining at the site's configured default role for agent accounts — the placeholder is derived from the agent's immutable ID, so it can only match that agent's own account. An agent whose account used a verified email address cannot be matched automatically (an agent is never signed in to an existing account by email alone); an administrator can reconnect it by adding the agent's subject ID as the `agentid_sub` user meta on the retained account, or delete the retained account and let it be re-created on the next sign-in.
+
+= Why does the plugin create a user account when an agent signs in? =
+
+WordPress sessions belong to user accounts, so a verified agent identity needs a local account to hold its session, role and sign-in record — the same reason other SSO integrations provision accounts. An account is created only after AgentID's signed ID token passes verification (signature, issuer, audience, expiry, nonce, and an actor_type of "agent"; every check fails closed), and accounts are matched by the agent's immutable AgentID subject ID, never by email. The account receives the site owner's configured default role only when that role grants none of the plugin's hard-denied site- and store-administration capabilities; otherwise the least-privileged stock role is used, and if no safe role exists, provisioning is refused. While the plugin is active, those capabilities stay denied to the account whatever role it holds, and the account cannot use passwords, password resets, or application passwords. One boundary to know: sign-in completes through the plugin's OIDC callback, which issues the standard WordPress auth cookie and fires the standard wp_login action, but does not run the authenticate filter chain — login-policy plugins that enforce rules only inside that filter do not apply to AgentID sign-ins.
 
 = Is this an official AgentMail plugin? =
 
@@ -111,6 +115,9 @@ Suggested privacy-policy text: "If you sign in with AgentID, we receive your age
 
 == Upgrade Notice ==
 
+= 0.1.6 =
+Security: store-management roles (e.g. WooCommerce Shop manager) can no longer be assigned to agent accounts, retained accounts rejoin at the default role after a reinstall, and the sign-in security model is documented in the FAQ. Recommended.
+
 = 0.1.5 =
 Renamed to AgentKey Sign-In for AgentID at the WordPress.org review team's request — the old name was too descriptive. Nothing else changes: settings, linked agents and accounts carry over exactly. Recommended for all sites.
 
@@ -127,6 +134,11 @@ Renamed to Agentic Agent SSO. The Gutenberg block now loads correctly in the edi
 Security hardening release: unconditional denial of site-administration capability for agent accounts, stricter ID token validation, and multisite-safe uninstall.
 
 == Changelog ==
+
+= 0.1.6 =
+* Security: the hard-denied capability set now also covers WooCommerce store management (store settings, reports, and product/order/coupon management) and data export/import, so store-management roles such as Shop manager — and custom roles carrying those capabilities — can no longer be assigned to, or kept by, agent accounts. The WooCommerce Customer role is unaffected.
+* Security: an account retained across an uninstall now rejoins at the site's configured safe default role on reconnect, instead of keeping whatever role the retained account happened to hold; the reconnect is refused when no safe role exists.
+* Documentation: the provisioning model is documented at the provisioning function and in a new FAQ entry, including the exact scope of the capability guarantees (they apply while the plugin is active) and the sign-in boundary (the OIDC callback fires the standard wp_login action but does not run the authenticate filter chain).
 
 = 0.1.5 =
 * Renamed: the plugin is now "AgentKey Sign-In for AgentID" (slug agentkey-sign-in-agentid), renamed at the WordPress.org Plugin Directory review team's request because the previous name was largely descriptive and not distinctive enough. The text domain follows the new slug; settings, options and account data are unchanged (they use the agentid_ prefix, which names the service the plugin connects to, not the plugin).

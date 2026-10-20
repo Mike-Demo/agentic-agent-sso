@@ -119,7 +119,8 @@ class AgentID_Guards {
 
 	/**
 	 * Capabilities an agent account must never hold, under any role
-	 * and regardless of its owner: the site-administration set.
+	 * and regardless of its owner: the site-administration set, the
+	 * data export/import pair, and WooCommerce store management.
 	 *
 	 * Denying only manage_options is not enough — an account that
 	 * keeps install_plugins, promote_users or unfiltered_html can
@@ -127,6 +128,15 @@ class AgentID_Guards {
 	 * which roles an agent may be provisioned with (see
 	 * AgentID_Settings::provisionable_roles()) and which roles get
 	 * demoted at sign-in (see demote_admin_agents()).
+	 *
+	 * The WooCommerce entries mirror WC_Install::get_core_capabilities()
+	 * (manage_woocommerce, reports, and the product / shop_order /
+	 * shop_coupon management families), so a store-management role
+	 * such as Shop manager is refused for agents exactly like an
+	 * administrator role. The participation-level caps (read_product
+	 * and the assign_*_terms caps) are deliberately not listed:
+	 * without the management caps they grant nothing on their own,
+	 * and the WooCommerce Customer role — read only — is unaffected.
 	 *
 	 * @return string[]
 	 */
@@ -164,6 +174,61 @@ class AgentID_Guards {
 			'upgrade_network',
 			'setup_network',
 			'delete_site',
+			// Data movement: held by administrators and Shop manager;
+			// an exporter run exfiltrates orders and customer data.
+			'export',
+			'import',
+			// WooCommerce store management (core pair).
+			'manage_woocommerce',
+			'view_woocommerce_reports',
+			// WooCommerce store management (product).
+			'edit_product',
+			'delete_product',
+			'edit_products',
+			'edit_others_products',
+			'publish_products',
+			'read_private_products',
+			'delete_products',
+			'delete_private_products',
+			'delete_published_products',
+			'delete_others_products',
+			'edit_private_products',
+			'edit_published_products',
+			'manage_product_terms',
+			'edit_product_terms',
+			'delete_product_terms',
+			// WooCommerce store management (shop_order).
+			'edit_shop_order',
+			'delete_shop_order',
+			'edit_shop_orders',
+			'edit_others_shop_orders',
+			'publish_shop_orders',
+			'read_private_shop_orders',
+			'delete_shop_orders',
+			'delete_private_shop_orders',
+			'delete_published_shop_orders',
+			'delete_others_shop_orders',
+			'edit_private_shop_orders',
+			'edit_published_shop_orders',
+			'manage_shop_order_terms',
+			'edit_shop_order_terms',
+			'delete_shop_order_terms',
+			// WooCommerce store management (shop_coupon).
+			'edit_shop_coupon',
+			'delete_shop_coupon',
+			'edit_shop_coupons',
+			'edit_others_shop_coupons',
+			'publish_shop_coupons',
+			'read_private_shop_coupons',
+			'delete_shop_coupons',
+			'delete_private_shop_coupons',
+			'delete_published_shop_coupons',
+			'delete_others_shop_coupons',
+			'edit_private_shop_coupons',
+			'edit_published_shop_coupons',
+			'manage_shop_coupon_terms',
+			'edit_shop_coupon_terms',
+			'delete_shop_coupon_terms',
 		);
 	}
 
